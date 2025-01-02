@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block title %}Гонщики NASCAR{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Заголовок и фильтры -->
+    <div class="row mb-4">
+        <div class="col">
+            <h1 class="display-4">Гонщики NASCAR</h1>
+            <div class="btn-group" role="group">
+                {% for s in series %}
+                <button type="button" class="btn btn-outline-primary series-button {% if s.name == 'NASCAR Cup Series' %}active{% endif %}" data-series="{{ s.id }}">{{ s.name }}</button>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Таблица гонщиков -->
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Гонщик</th>
+                                    <th>Команда</th>
+                                    <th>Серия</th>
+                                    <th class="sortable" data-sort="points">Очки</th>
+                                    <th class="sortable" data-sort="wins">Победы</th>
+                                    <th class="sortable" data-sort="poles">Поулы</th>
+                                    <th class="sortable" data-sort="top5">Топ-5</th>
+                                    <th class="sortable" data-sort="top10">Топ-10</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for driver in drivers %}
+                                <tr class="driver-row" data-driver-id="{{ driver.id }}" data-series="{{ driver.series_id }}" {% if driver.series_name != 'NASCAR Cup Series' %}style="display: none;"{% endif %}>
+                                    <td data-name="{{ driver.name }}">{{ driver.name }}</td>
+                                    <td data-team="{{ driver.team }}">{{ driver.team }}</td>
+                                    <td data-series="{{ driver.series_name }}">{{ driver.series_name }}</td>
+                                    <td data-points="{{ driver.points }}">{{ driver.points }}</td>
+                                    <td data-wins="{{ driver.wins }}">{{ driver.wins }}</td>
+                                    <td data-poles="{{ driver.poles }}">{{ driver.poles }}</td>
+                                    <td data-top5="{{ driver.top5 }}">{{ driver.top5 }}</td>
+                                    <td data-top10="{{ driver.top10 }}">{{ driver.top10 }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно с информацией о гонщике -->
+<div class="modal fade" id="driverDetailsModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Информация о гонщике</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <!-- Фото гонщика -->
+                    <div class="col-md-4">
+                        <img id="driverPhoto" src="" alt="Фото гонщика" class="img-fluid rounded">
+                    </div>
+                    <!-- Информация о гонщике -->
+                    <div class="col-md-8">
+                        <h4 id="driverName"></h4>
+                        <p><strong>Команда:</strong> <span id="driverTeam"></span></p>
+                        <p><strong>Серии:</strong> <span id="driverSeries"></span></p>
+                        
+                        <h5 class="mt-4">Статистика сезона</h5>
+                        <div class="row">
+                            <div class="col-6">
+                                <p><strong>Очки:</strong> <span id="driverPoints"></span></p>
+                                <p><strong>Победы:</strong> <span id="driverWins"></span></p>
+                                <p><strong>Поулы:</strong> <span id="driverPoles"></span></p>
+                                <p><strong>Топ-5:</strong> <span id="driverTop5"></span></p>
+                            </div>
+                            <div class="col-6">
+                                <p><strong>Топ-10:</strong> <span id="driverTop10"></span></p>
+                                <p><strong>Средняя стартовая позиция:</strong> <span id="driverAvgStart"></span></p>
+                                <p><strong>Средняя финишная позиция:</strong> <span id="driverAvgFinish"></span></p>
+                                <p><strong>Участие в плей-офф:</strong> <span id="driverPlayoff"></span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

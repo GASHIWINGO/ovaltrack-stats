@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Производители NASCAR{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row mb-4">
+        <div class="col">
+            <h1 class="display-4">Производители NASCAR</h1>
+            <div class="btn-group" role="group">
+                {% for s in series %}
+                <button type="button" class="btn btn-outline-primary series-button {% if s.name == 'NASCAR Cup Series' %}active{% endif %}" data-series="{{ s.id }}">{{ s.name }}</button>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Производитель</th>
+                                    <th>Серия</th>
+                                    <th class="sortable" data-sort="points">Очки</th>
+                                    <th class="sortable" data-sort="wins">Победы</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for series_name, manufacturers in manufacturers_by_series.items() %}
+                                    {% for manufacturer in manufacturers %}
+                                    <tr class="manufacturer-row" 
+                                        data-series="{{ manufacturer.series[0].id }}" 
+                                        {% if series_name != 'NASCAR Cup Series' %}style="display: none;"{% endif %}>
+                                        <td>{{ manufacturer.name }}</td>
+                                        <td>{{ series_name }}</td>
+                                        <td data-points="{{ manufacturer.points }}">{{ manufacturer.points }}</td>
+                                        <td data-wins="{{ manufacturer.wins }}">{{ manufacturer.wins }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

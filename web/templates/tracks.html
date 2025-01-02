@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}Трассы NASCAR{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row mb-4">
+        <div class="col">
+            <h1 class="display-4">Трассы NASCAR</h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Название</th>
+                                    <th>Расположение</th>
+                                    <th class="sortable" data-sort="length">Длина (миль)</th>
+                                    <th>Тип</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for track in tracks %}
+                                <tr class="track-row">
+                                    <td>{{ track.name }}</td>
+                                    <td>{{ track.location }}</td>
+                                    <td data-length="{{ track.length }}">{{ track.length }}</td>
+                                    <td>{{ track.type }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Обработка сортировки
+    const sortableHeaders = document.querySelectorAll('.sortable');
+    sortableHeaders.forEach(header => {
+        header.addEventListener('click', function() {
+            const table = this.closest('table');
+            const tbody = table.querySelector('tbody');
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+            const sortBy = this.dataset.sort;
+            
+            // Определяем направление сортировки
+            const currentDirection = this.classList.contains('sorting-asc') ? 'desc' : 'asc';
+            
+            // Обновляем классы сортировки
+            sortableHeaders.forEach(h => {
+                h.classList.remove('sorting-asc', 'sorting-desc');
+            });
+            this.classList.add(`sorting-${currentDirection}`);
+
+            // Сортируем строки
+            rows.sort((a, b) => {
+                const aValue = parseFloat(a.querySelector(`[data-${sortBy}]`).dataset[sortBy]);
+                const bValue = parseFloat(b.querySelector(`[data-${sortBy}]`).dataset[sortBy]);
+                return currentDirection === 'asc' ? aValue - bValue : bValue - aValue;
+            });
+
+            // Обновляем таблицу
+            rows.forEach(row => tbody.appendChild(row));
+        });
+    });
+});
+</script>
+{% endblock %} 

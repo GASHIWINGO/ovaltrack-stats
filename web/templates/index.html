@@ -1,0 +1,107 @@
+<!-- web/templates/index.html -->
+{% extends "base.html" %}
+
+{% block title %}Главная{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- Ближайшие гонки -->
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="card-title mb-0">Ближайшие гонки</h5>
+            </div>
+            <div class="card-body">
+                {% for race in upcoming_races %}
+                <div class="upcoming-race mb-3">
+                    <h6>{{ race.name }}</h6>
+                    <div class="text-muted">
+                        <small>
+                            <i class="fas fa-calendar"></i> {{ race.date }}
+                            <br>
+                            <i class="fas fa-map-marker-alt"></i> {{ race.track }}
+                        </small>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Последние результаты -->
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-header bg-success text-white">
+                <h5 class="card-title mb-0">Последние результаты</h5>
+            </div>
+            <div class="card-body">
+                {% for result in latest_results %}
+                <div class="race-result mb-3">
+                    <h6>{{ result.race_name }}</h6>
+                    <div class="podium">
+                        <div class="position">
+                            🥇 {{ result.first_place }}
+                        </div>
+                        <div class="position">
+                            🥈 {{ result.second_place }}
+                        </div>
+                        <div class="position">
+                            🥉 {{ result.third_place }}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Лидеры чемпионата -->
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-header bg-warning">
+                <h5 class="card-title mb-0">Лидеры чемпионата</h5>
+            </div>
+            <div class="card-body">
+                {% for series in championship_leaders %}
+                <div class="series-leaders mb-3">
+                    <h6>{{ series.name }}</h6>
+                    <ol class="list-unstyled">
+                        {% for driver in series.leaders %}
+                        <li class="mb-2">
+                            <strong>{{ driver.position }}.</strong>
+                            {{ driver.name }}
+                            <span class="float-end">{{ driver.points }} очков</span>
+                        </li>
+                        {% endfor %}
+                    </ol>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Новости и обновления -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-info text-white">
+                <h5 class="card-title mb-0">Последние обновления</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    {% for update in latest_updates %}
+                    <div class="col-md-6">
+                        <div class="update-item mb-3">
+                            <h6>{{ update.title }}</h6>
+                            <p class="text-muted">{{ update.description }}</p>
+                            <small class="text-muted">{{ update.date }}</small>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,99 @@
+/* Стили для страницы гонок */
+.card {
+    margin-bottom: 2rem;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+.card-header {
+    background-color: #f8f9fa;
+    border-bottom: none;
+}
+
+.table {
+    margin-bottom: 0;
+}
+
+.table th {
+    border-top: none;
+    font-weight: 600;
+}
+
+.badge {
+    font-weight: 500;
+    padding: 0.5em 0.75em;
+}
+
+/* Анимация при наведении на строки таблицы */
+.table-hover tbody tr:hover {
+    background-color: rgba(0, 123, 255, 0.075);
+    transition: background-color 0.2s ease;
+}
+
+/* Стили для таблиц с прокруткой */
+.table-responsive {
+    overflow-y: auto;
+    border-radius: 0.25rem;
+}
+
+.sticky-top {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+/* Стили для кнопок фильтра */
+.btn-group {
+    margin-bottom: 1rem;
+}
+
+.btn-outline-primary.active {
+    background-color: #0d6efd;
+    color: white;
+}
+
+/* Стили для строк таблицы */
+.race-row {
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.race-row:hover {
+    background-color: rgba(0, 123, 255, 0.1);
+}
+
+/* Стили для модального окна */
+.modal-xl {
+    max-width: 1200px;
+}
+
+.race-info {
+    background-color: #f8f9fa;
+    padding: 1rem;
+    border-radius: 0.25rem;
+}
+
+.sortable {
+    cursor: pointer;
+    position: relative;
+}
+
+.sortable:after {
+    content: '↕';
+    position: absolute;
+    right: 8px;
+    opacity: 0.5;
+}
+
+.sortable.asc:after {
+    content: '↑';
+    opacity: 1;
+}
+
+.sortable.desc:after {
+    content: '↓';
+    opacity: 1;
+}
+
+.driver-row {
+    cursor: pointer;
+}

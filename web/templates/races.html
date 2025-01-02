@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+
+{% block title %}Гонки NASCAR{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Заголовок и фильтры -->
+    <div class="row mb-4">
+        <div class="col">
+            <h1 class="display-4">Гонки NASCAR</h1>
+            <div class="btn-group" role="group">
+                {% for s in series %}
+                <button type="button" class="btn btn-outline-primary series-button {% if s.name == 'NASCAR Cup Series' %}active{% endif %}" data-series="{{ s.id }}">{{ s.name }}</button>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Предстоящие гонки -->
+    <div class="row mb-4">
+        <div class="col">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Предстоящие гонки</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Дата</th>
+                                    <th>Название</th>
+                                    <th>Трасса</th>
+                                    <th>Серия</th>
+                                    <th class="sortable" data-sort="distance">Дистанция</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for race in upcoming_races %}
+                                <tr class="race-row" data-race-id="{{ race.id }}" data-series="{{ race.series[0].id }}" {% if race.series[0].name != 'NASCAR Cup Series' %}style="display: none;"{% endif %}>
+                                    <td>{{ race.date.strftime('%d.%m.%Y') }}</td>
+                                    <td>{{ race.name }}</td>
+                                    <td>{{ race.track.name }}</td>
+                                    <td>{{ race.series[0].name }}</td>
+                                    <td data-distance="{{ race.distance }}">{{ race.distance }} миль</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Прошедшие гонки -->
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Прошедшие гонки</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Дата</th>
+                                    <th>Название</th>
+                                    <th>Трасса</th>
+                                    <th>Серия</th>
+                                    <th class="sortable" data-sort="distance">Дистанция</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for race in past_races %}
+                                <tr class="race-row" data-race-id="{{ race.id }}" data-series="{{ race.series[0].id }}" {% if race.series[0].name != 'NASCAR Cup Series' %}style="display: none;"{% endif %}>
+                                    <td>{{ race.date.strftime('%d.%m.%Y') }}</td>
+                                    <td>{{ race.name }}</td>
+                                    <td>{{ race.track.name }}</td>
+                                    <td>{{ race.series[0].name }}</td>
+                                    <td data-distance="{{ race.distance }}">{{ race.distance }} миль</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно с деталями гонки -->
+<div class="modal fade" id="raceDetailsModal" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Детали гонки</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Информация о гонке -->
+                <div class="race-info mb-4">
+                    <h4 id="raceName"></h4>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <strong>Дата:</strong> <span id="raceDate"></span>
+                        </div>
+                        <div class="col-md-3">
+                            <strong>Трасса:</strong> <span id="raceTrack"></span>
+                        </div>
+                        <div class="col-md-3">
+                            <strong>Серия:</strong> <span id="raceSeries"></span>
+                        </div>
+                        <div class="col-md-3">
+                            <strong>Дистанция:</strong> <span id="raceDistance"></span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Таблица результатов -->
+                <div class="table-responsive" style="max-height: 500px;">
+                    <table class="table table-striped" id="raceResultsTable">
+                        <thead class="sticky-top bg-white">
+                            <tr>
+                                <th>Позиция</th>
+                                <th>Гонщик</th>
+                                <th class="sortable" data-sort="start">Старт</th>
+                                <th class="sortable" data-sort="laps">Круги</th>
+                                <th class="sortable" data-sort="points">Очки</th>
+                                <th class="sortable" data-sort="pit_stops">Пит-стопы</th>
+                                <th class="sortable" data-sort="best_lap">Лучший круг</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+<!-- В конце body -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+
