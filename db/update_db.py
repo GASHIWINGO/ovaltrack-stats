@@ -7,6 +7,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 import logging
 from create_db import Race, DriverRaceStats, DriverChampionshipStats
+from config import API_KEY 
 
 logging.basicConfig(
     filename='nascar_updates.log',
@@ -15,7 +16,7 @@ logging.basicConfig(
 )
 
 class NASCARDatabaseUpdater:
-    def __init__(self, api_key):
+    def __init__(self, api_key = API_KEY):
         self.api_key = api_key
         self.engine = create_engine('postgresql://postgres:123@localhost/nascar_stats')
         self.Session = sessionmaker(bind=self.engine)
@@ -232,6 +233,5 @@ class NASCARDatabaseUpdater:
         print("\nЕжедневное обновление завершено")
 
 if __name__ == "__main__":
-    API_KEY = "62squzqJVdEnljubRtjFR3BlQfnY4F2ign8oiVmE"
-    updater = NASCARDatabaseUpdater(API_KEY)
+    updater = NASCARDatabaseUpdater()
     updater.run_daily_update()

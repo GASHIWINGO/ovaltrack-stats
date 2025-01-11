@@ -3,6 +3,7 @@ import time
 from sqlalchemy import create_engine, select
 from sqlalchemy.orm import sessionmaker
 from create_db import DriverRaceStats, Race, RaceSeries, Base
+from config import API_KEY
 
 SERIES_ALIASES = {
     'mc': 1,  # Cup Series ID
@@ -39,7 +40,7 @@ def get_series_alias_by_race_id(session, race_id):
             return alias
     return None
 
-def seed_race_stats(api_key):
+def seed_race_stats(api_key=API_KEY):
     engine = create_engine('postgresql://postgres:123@localhost/nascar_stats')
     Session = sessionmaker(bind=engine)
     session = Session()
@@ -96,5 +97,4 @@ def seed_race_stats(api_key):
         session.close()
 
 if __name__ == "__main__":
-    API_KEY = "62squzqJVdEnljubRtjFR3BlQfnY4F2ign8oiVmE"
-    seed_race_stats(API_KEY) 
+    seed_race_stats() 

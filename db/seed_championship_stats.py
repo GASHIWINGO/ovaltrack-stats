@@ -3,6 +3,7 @@ import time
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from create_db import DriverChampionshipStats, Base
+from config import API_KEY, YEAR
 
 SERIES_ALIASES = {
     'mc': 1,  # Cup Series ID
@@ -29,7 +30,7 @@ def fetch_standings_data(api_key, series_alias, year, max_retries=3):
             return None
     return None
 
-def seed_championship_stats(api_key, year="2024"):
+def seed_championship_stats(api_key=API_KEY, year=YEAR):
     engine = create_engine('postgresql://postgres:123@localhost/nascar_stats')
     Session = sessionmaker(bind=engine)
     session = Session()
@@ -68,5 +69,4 @@ def seed_championship_stats(api_key, year="2024"):
         session.close()
 
 if __name__ == "__main__":
-    API_KEY = "62squzqJVdEnljubRtjFR3BlQfnY4F2ign8oiVmE"
-    seed_championship_stats(API_KEY) 
+    seed_championship_stats() 

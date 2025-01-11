@@ -4,6 +4,7 @@ from datetime import datetime
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from create_db import Race, RaceSeries, Base
+from config import API_KEY, YEAR
 
 SERIES_ALIASES = {
     'mc': 1,  # Cup Series ID
@@ -38,7 +39,7 @@ def parse_datetime(datetime_str):
     except ValueError:
         return None
 
-def seed_races(api_key, year="2024"):
+def seed_races(api_key = API_KEY, year = YEAR):
     engine = create_engine('postgresql://postgres:123@localhost/nascar_stats')
     Session = sessionmaker(bind=engine)
     session = Session()
@@ -95,5 +96,4 @@ def seed_races(api_key, year="2024"):
         session.close()
 
 if __name__ == "__main__":
-    API_KEY = "62squzqJVdEnljubRtjFR3BlQfnY4F2ign8oiVmE"
-    seed_races(API_KEY) 
+    seed_races() 

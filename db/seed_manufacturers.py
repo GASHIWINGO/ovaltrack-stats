@@ -3,6 +3,7 @@ import time
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from create_db import Manufacturer, ManufacturerSeries, Base
+from config import API_KEY, YEAR
 
 SERIES_ALIASES = {
     'mc': 1,  # Cup Series ID
@@ -31,7 +32,7 @@ def fetch_manufacturer_data(api_key, series_alias, year, max_retries=3):
     print(f"Не удалось получить данные для серии {series_alias} после {max_retries} попыток")
     return None
 
-def seed_manufacturers(api_key, year="2024"):
+def seed_manufacturers(api_key = API_KEY, year = YEAR):
     engine = create_engine('postgresql://postgres:123@localhost/nascar_stats')
     Session = sessionmaker(bind=engine)
     session = Session()
@@ -77,5 +78,4 @@ def seed_manufacturers(api_key, year="2024"):
         session.close()
 
 if __name__ == "__main__":
-    API_KEY = "62squzqJVdEnljubRtjFR3BlQfnY4F2ign8oiVmE"
-    seed_manufacturers(API_KEY)
+    seed_manufacturers()

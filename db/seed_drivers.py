@@ -4,6 +4,7 @@ from datetime import datetime
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from create_db import Driver, DriverSeries, Base
+from config import API_KEY, YEAR 
 
 SERIES_ALIASES = {
     'mc': 1,  # Cup Series ID
@@ -58,7 +59,7 @@ def get_team_name(driver_data):
             return car['team']['name']
     return None
 
-def seed_drivers(api_key, year="2024"):
+def seed_drivers(api_key=API_KEY, year=YEAR):
     engine = create_engine('postgresql://postgres:123@localhost/nascar_stats')
     Session = sessionmaker(bind=engine)
     session = Session()
@@ -111,5 +112,4 @@ def seed_drivers(api_key, year="2024"):
         session.close()
 
 if __name__ == "__main__":
-    API_KEY = "62squzqJVdEnljubRtjFR3BlQfnY4F2ign8oiVmE"
-    seed_drivers(API_KEY) 
+    seed_drivers() 

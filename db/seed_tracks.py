@@ -2,6 +2,7 @@ import requests
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from create_db import Track, Base
+from config import API_KEY
 
 def fetch_tracks_data(api_key):
     url = f"https://api.sportradar.com/nascar-ot3/tracks/list.json?api_key={api_key}"
@@ -15,7 +16,7 @@ def fetch_tracks_data(api_key):
         print(f"Ошибка при получении данных из API: {e}")
         return None
 
-def seed_tracks(api_key):
+def seed_tracks(api_key = API_KEY):
     # Создаем подключение к базе данных
     engine = create_engine('postgresql://postgres:123@localhost/nascar_stats')
     Session = sessionmaker(bind=engine)
@@ -47,5 +48,4 @@ def seed_tracks(api_key):
         session.close()
 
 if __name__ == "__main__":
-    API_KEY = "62squzqJVdEnljubRtjFR3BlQfnY4F2ign8oiVmE"
-    seed_tracks(API_KEY) 
+    seed_tracks() 
