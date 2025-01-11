@@ -45,14 +45,26 @@ This is a web application built using Flask that provides statistics and informa
    - Make sure you have PostgreSQL installed and running.
    - Create a database named `nascar_stats`.
    - Update the database URI in `web/config.py` if necessary.
+   - Open a configuration file `config.py` in the `ovaltrack-stats/db/` directory and specify your API key and year:
 
-5. Run the application:
+     ```python
+     API_KEY = "YOUR_API_KEY"  # Replace with your API key
+     YEAR = "2024"  # Specify the desired year
+     ```
+
+5. Create and fill the database using the script:
+
+   ```bash
+   python ovaltrack-stats/db/run_all.py
+   ```
+
+6. Run the application:
 
    ```bash
    python run.py
    ```
 
-6. Open your web browser and go to `http://127.0.0.1:5000` to view the application.
+7. Open your web browser and go to `http://127.0.0.1:5000` to view the application.
 
 ## Usage
 
@@ -64,10 +76,6 @@ This is a web application built using Flask that provides statistics and informa
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a pull request or open an issue for any suggestions or improvements.
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ## Acknowledgments
 
