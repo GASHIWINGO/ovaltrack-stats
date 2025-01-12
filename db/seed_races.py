@@ -90,7 +90,7 @@ def seed_races(api_key = API_KEY, year = YEAR):
         print("Данные о гонках успешно добавлены в базу данных")
     except Exception as e:
         session.rollback()
-        print(f"Произошла ошибка при добавлении данн��х: {e}")
+        print(f"Произошла ошибка при добавлении данных: {e}")
         raise e
     finally:
         session.close()

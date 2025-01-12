@@ -22,41 +22,18 @@ def index():
             )
             
             for driver in primary_drivers:
-                # Получаем статистику только для текущей серии
-                race_stats = (
-                    DriverRaceStats.query
-                    .join(Race, DriverRaceStats.race_id == Race.id)
-                    .join(Race.series)
+                # Получаем статистику чемпионата для текущего года
+                stats = (
+                    DriverChampionshipStats.query
                     .filter(
-                        DriverRaceStats.driver_id == driver.id,
-                        RacingSeries.id == s.id,
-                        extract('year', Race.date) == current_year
+                        DriverChampionshipStats.driver_id == driver.id,
                     )
-                    .all()
+                    .first()
                 )
                 
-                # Пропускаем гонщиков без гонок в текущем сезоне
-                if not race_stats:
+                # Пропускаем гонщиков без статистики в текущем сезоне
+                if not stats:
                     continue
-                
-                # Подсчитываем базовые очки
-                base_points = sum(stat.points for stat in race_stats if stat.points is not None)
-                
-                # Добавляем плей-офф бонус (5000 для первых 8 и 2000 для следующих 8)
-                playoff_bonus = 0
-                if s.name == "NASCAR Cup Series" and base_points > 800:  # Примерный порог для плей-офф
-                    if len([d for d in drivers_data if d['series_name'] == s.name]) < 8:
-                        playoff_bonus = 5000
-                    elif len([d for d in drivers_data if d['series_name'] == s.name]) < 16:
-                        playoff_bonus = 2000
-                
-                total_points = base_points + playoff_bonus
-                
-                # Подсчитываем остальную статистику
-                wins = sum(1 for stat in race_stats if stat.finish_position == 1)
-                poles = sum(1 for stat in race_stats if stat.start_position == 1)
-                top5_count = sum(1 for stat in race_stats if stat.finish_position <= 5)
-                top10_count = sum(1 for stat in race_stats if stat.finish_position <= 10)
                 
                 drivers_data.append({
                     'id': driver.id,
@@ -64,12 +41,12 @@ def index():
                     'team': driver.team,
                     'series_id': s.id,
                     'series_name': s.name,
-                    'points': total_points,
-                    'wins': wins,
-                    'poles': poles,
-                    'top5': top5_count,
-                    'top10': top10_count,
-                    'playoff_bonus': playoff_bonus > 0
+                    'points': stats.total_points,
+                    'wins': stats.wins,
+                    'poles': stats.poles,
+                    'top5': stats.top5_finishes,
+                    'top10': stats.top10_finishes,
+                    'playoff_bonus': stats.playoff_bonus > 0
                 })
         
         # Сортируем по очкам
@@ -89,11 +66,6 @@ def get_driver_details(driver_id):
         driver = Driver.query.get_or_404(driver_id)
         stats = driver.championship_stats
 
-        # Подсчитываем количество финишей в топ-5 и топ-10
-        race_stats = DriverRaceStats.query.filter_by(driver_id=driver_id).all()
-        top5_count = sum(1 for stat in race_stats if stat.finish_position <= 5)
-        top10_count = sum(1 for stat in race_stats if stat.finish_position <= 10)
-
         # Словарь с URL фотографий гонщиков
         driver_photos = {
             'Kyle Larson': 'https://www.nascar.com/wp-content/uploads/sites/7/2021/11/18/kyle-larson-hero-image-2022.png',
@@ -111,11 +83,11 @@ def get_driver_details(driver_id):
                 'series': [s.name for s in driver.series],
             },
             'stats': {
-                'points': stats.points if stats else 0,
+                'points': stats.total_points if stats else 0,
                 'wins': stats.wins if stats else 0,
                 'poles': stats.poles if stats else 0,
-                'top5': top5_count,  # Используем подсчитанное значение
-                'top10': top10_count,  # Используем подсчитанное значение
+                'top5': stats.top5_finishes if stats else 0,
+                'top10': stats.top10_finishes if stats else 0,
                 'avg_start': float(stats.avg_start) if stats and stats.avg_start else 0.0,
                 'avg_finish': float(stats.avg_finish) if stats and stats.avg_finish else 0.0,
                 'playoff_eligible': stats.playoff_eligible if stats else False

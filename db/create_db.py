@@ -15,6 +15,12 @@ class DriverChampionshipStats(Base):
     wins = Column(Integer)
     poles = Column(Integer)
     
+    base_points = Column(Integer, default=0)
+    playoff_bonus = Column(Integer, default=0)
+    total_points = Column(Integer, default=0)
+    top5_finishes = Column(Integer, default=0)
+    top10_finishes = Column(Integer, default=0) 
+
     # Отношения
     driver = relationship("Driver", back_populates="championship_stats")
 

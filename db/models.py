@@ -94,6 +94,11 @@ class DriverChampionshipStats(db.Model):
     avg_finish = db.Column(db.Float)
     wins = db.Column(db.Integer)
     poles = db.Column(db.Integer)
+    base_points = db.Column(db.Integer, default=0)
+    playoff_bonus = db.Column(db.Integer, default=0)
+    total_points = db.Column(db.Integer, default=0)
+    top5_finishes = db.Column(db.Integer, default=0)
+    top10_finishes = db.Column(db.Integer, default=0)
     
     driver = db.relationship("Driver", back_populates="championship_stats")
 
